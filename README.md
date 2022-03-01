@@ -4,11 +4,9 @@
 
 ```
 mvn clean compile assembly:single
-
 ```
 ## Command to run for calling the jar file
 
 ```
 java -jar target/bicycle_notifier.jar
-
 ```
