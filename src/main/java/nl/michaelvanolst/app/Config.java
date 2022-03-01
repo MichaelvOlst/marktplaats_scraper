@@ -11,7 +11,7 @@ public final class Config {
   
   private Config() {
 
-    String configPropertyFile = System.getProperty("user.dir") + "/src/main/resources/config.properties";
+    String configPropertyFile = System.getProperty("user.dir") + "/config.properties";
 
     try (InputStream input = new FileInputStream(configPropertyFile)) {
         this.properties = new Properties();

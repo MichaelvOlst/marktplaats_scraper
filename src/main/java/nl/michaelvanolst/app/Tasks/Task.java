@@ -1,19 +1,18 @@
 package nl.michaelvanolst.app.Tasks;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.TimerTask;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import nl.michaelvanolst.app.Config;
+import nl.michaelvanolst.app.Scraper;
+import nl.michaelvanolst.app.Exceptions.ScraperException;
 
 import java.util.*;
 import javax.mail.*;
 import javax.mail.internet.*;
+
+
 import javax.activation.*;
 import javax.mail.Session;
 import javax.mail.Transport;
@@ -21,15 +20,13 @@ import javax.mail.Transport;
 public class Task extends TimerTask {
 
   private final String url;
-  private final String element;
+  private final String[] selectors;
   private final int interval;
   private final String filter;
 
-  private Document document;
-
-  public Task(String url, String element, int interval, String filter) {
+  public Task(String url, String[] selectors, int interval, String filter) {
     this.url = url;
-    this.element = element;
+    this.selectors = selectors;
     this.interval = interval;
     this.filter = filter;
   }
@@ -38,8 +35,8 @@ public class Task extends TimerTask {
     return this.url;
   }
 
-  public String getElement() {
-    return this.element;
+  public String[] getSelectors() {
+    return this.selectors;
   }
 
   public Long getInterval() {
@@ -48,30 +45,31 @@ public class Task extends TimerTask {
 
   public void run() {
     try {
-      this.document = Jsoup.connect(url).get();
-      this.handle();
-    } catch(IOException ex) {
-      System.out.println(ex.getStackTrace());
+      Scraper scraper = new Scraper(this.url, this.selectors);
+      this.parseAndFilterContent(scraper.get());
+    } catch(ScraperException ex) {
+      System.out.println(ex.getMessage());
     }
   }
 
-  private void handle() {
-    List<String> filteredList = new ArrayList<String>();
+  private void parseAndFilterContent(String[] contents) {
+    // List<String> filteredList = new ArrayList<String>();
 
-    String[] filterSplitted = this.filter.split(":");
-    String filter = filterSplitted[0].trim();
-    String value = filterSplitted[1].trim();
-
-    Elements Elements = this.document.select(this.element);
-    for(Element element : Elements) {
-      String text = element.text();
-
-      if(filter.contains("contains") && text.contains(value)) {
-        filteredList.add(text);
-      }
+    for(String content : contents) {
+      System.out.println(content);
     }
 
-    this.notifyByMail(filteredList);
+    // String[] filterSplitted = this.filter.split(":");
+    // String filter = filterSplitted[0].trim();
+    // String value = filterSplitted[1].trim();
+
+    // if(filter.contains("contains") && contents.contains(value)) {
+    //   System.out.println(contents);
+    //   // filteredList.add(text);
+    // }
+    
+
+    // this.notifyByMail(filteredList);
   }
 
 
