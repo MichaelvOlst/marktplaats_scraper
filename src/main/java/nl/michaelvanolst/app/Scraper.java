@@ -27,7 +27,9 @@ public class Scraper {
 
       List<String> contents = new ArrayList<String>();
       for(String selector : this.selectors) {
-        contents.add(page.locator(selector).textContent().trim());
+        for (String text: page.locator(selector).allTextContents()) {
+          contents.add(text);
+        }
       }
 
       page.close();

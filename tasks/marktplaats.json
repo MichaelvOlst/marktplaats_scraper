@@ -1,0 +1,9 @@
+{
+  "url": "https://www.marktplaats.nl/l/auto-s/ford/f/focus+benzine/784+473/#f:484|constructionYearFrom:2019|sortBy:SORT_INDEX|sortOrder:DECREASING",
+  "selectors": [
+    ".mp-Listing-title",
+    ".mp-Listing-price"
+  ],
+  "interval": 2,
+  "filter": "contains : voorraad"
+}
