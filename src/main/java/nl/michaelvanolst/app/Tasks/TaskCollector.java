@@ -9,19 +9,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import nl.michaelvanolst.app.Dto.TaskDto;
 
 public class TaskCollector {
 
   private final String directory;
-  private List<Task> tasks = new ArrayList<Task>();
+  private List<TaskDto> tasks = new ArrayList<TaskDto>();
 
   public TaskCollector(String directory) {
     this.directory = directory;
   }
   
-  public List<Task> get() throws IOException {
+  public List<TaskDto> get() throws IOException {
 
     for (File file : this.getTaskFilesFromDirectory()) {
       this.tasks.add(this.parseFileToTask(file));
@@ -40,23 +40,13 @@ public class TaskCollector {
   }
 
 
-  private Task parseFileToTask(File file) throws IOException {
+  private TaskDto parseFileToTask(File file) throws IOException {
     String json = Files.readString(file.toPath());
-    JSONObject obj = new JSONObject(json);
 
-    JSONArray jsonSelectors = obj.getJSONArray("selectors");
+    ObjectMapper objectMapper = new ObjectMapper();
+    TaskDto task = objectMapper.readValue(json, TaskDto.class);
 
-    List<String> selectorsList = new ArrayList<String>();
-    for(int i=0; i < jsonSelectors.length(); i++){
-      selectorsList.add(jsonSelectors.getString(i));
-    }
-
-    return new Task(
-      obj.getString("url"),
-      selectorsList.toArray(new String[selectorsList.size()]),
-      obj.getInt("interval"),
-      obj.getString("filter")
-    );
+    return task;
   }
 
 }

@@ -1,8 +1,9 @@
 {
   "url": "https://www.fietsvoordeelshop.nl/gazelle-orange-c7-plus-2022-grijs-heren",
-  "selectors": [
-    "#productSelector115915Label"
-  ],
+  "selectors": {
+    "title": "#productSelector115915Label"
+  },
   "interval": 2,
+  "type": "notify",
   "filter": "contains : voorraad"
 }

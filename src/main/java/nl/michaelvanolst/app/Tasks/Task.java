@@ -6,12 +6,13 @@ import org.jsoup.nodes.Document;
 
 import nl.michaelvanolst.app.Config;
 import nl.michaelvanolst.app.Scraper;
+import nl.michaelvanolst.app.Dto.ScraperResult;
+import nl.michaelvanolst.app.Dto.TaskDto;
 import nl.michaelvanolst.app.Exceptions.ScraperException;
 
 import java.util.*;
 import javax.mail.*;
 import javax.mail.internet.*;
-
 
 import javax.activation.*;
 import javax.mail.Session;
@@ -19,34 +20,18 @@ import javax.mail.Transport;
 
 public class Task extends TimerTask {
 
-  private final String url;
-  private final String[] selectors;
-  private final int interval;
-  private final String filter;
+  private final TaskDto taskDto;
 
-  public Task(String url, String[] selectors, int interval, String filter) {
-    this.url = url;
-    this.selectors = selectors;
-    this.interval = interval;
-    this.filter = filter;
-  }
-
-  public String getUrl() {
-    return this.url;
-  }
-
-  public String[] getSelectors() {
-    return this.selectors;
-  }
-
-  public Long getInterval() {
-    return Long.valueOf(interval * 1000); 
+  public Task(TaskDto taskDto) {
+    this.taskDto = taskDto;
   }
 
   public void run() {
     try {
-      Scraper scraper = new Scraper(this.url, this.selectors);
-      this.parseAndFilterContent(scraper.get());
+      Scraper scraper = new Scraper(this.taskDto);
+      for(ScraperResult result : scraper.get()) {
+        System.out.print(result.toString());
+      }
     } catch(ScraperException ex) {
       System.out.println(ex.getMessage());
     }

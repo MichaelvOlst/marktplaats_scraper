@@ -8,6 +8,12 @@ public class App
     public static void main( String[] args ) {
         String taskDirectory = System.getProperty("user.dir") + "/tasks";
         TaskCollector taskCollector = new TaskCollector(taskDirectory);
+        
+        // try {
+        //     taskCollector.get();
+        // } catch(IOException ex) {
+        //     System.out.println(ex.getStackTrace());
+        // }
 
         try {
             ScrapeScheduler scheduler = new ScrapeScheduler(taskCollector.get());
