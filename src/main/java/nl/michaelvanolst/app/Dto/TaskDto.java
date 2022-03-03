@@ -17,6 +17,7 @@ import lombok.Setter;
 @JsonInclude(Include.NON_NULL)
 public class TaskDto {
   
+  private String title;
   private String url;
   private int interval;
   private String filter;

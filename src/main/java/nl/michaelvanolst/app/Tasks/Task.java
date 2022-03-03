@@ -6,7 +6,7 @@ import org.jsoup.nodes.Document;
 
 import nl.michaelvanolst.app.Config;
 import nl.michaelvanolst.app.Scraper;
-import nl.michaelvanolst.app.Dto.ScraperResult;
+import nl.michaelvanolst.app.Dto.ScraperResultDto;
 import nl.michaelvanolst.app.Dto.TaskDto;
 import nl.michaelvanolst.app.Exceptions.ScraperException;
 
@@ -29,8 +29,8 @@ public class Task extends TimerTask {
   public void run() {
     try {
       Scraper scraper = new Scraper(this.taskDto);
-      for(ScraperResult result : scraper.get()) {
-        System.out.print(result.toString());
+      for(ScraperResultDto result : scraper.get()) {
+        System.out.print("result " + result.toString());
       }
     } catch(ScraperException ex) {
       System.out.println(ex.getMessage());

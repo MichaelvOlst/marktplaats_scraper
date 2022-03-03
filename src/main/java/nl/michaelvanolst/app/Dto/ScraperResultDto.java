@@ -11,7 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class ScraperResult {
+public class ScraperResultDto {
   
   private Map<String, String> contents;
 
