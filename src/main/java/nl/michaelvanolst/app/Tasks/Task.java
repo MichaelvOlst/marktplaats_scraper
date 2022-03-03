@@ -9,6 +9,7 @@ import nl.michaelvanolst.app.Scraper;
 import nl.michaelvanolst.app.Dto.ScraperResultDto;
 import nl.michaelvanolst.app.Dto.TaskDto;
 import nl.michaelvanolst.app.Exceptions.ScraperException;
+import nl.michaelvanolst.app.store.JsonStore;
 
 import java.util.*;
 import javax.mail.*;
@@ -28,7 +29,7 @@ public class Task extends TimerTask {
 
   public void run() {
     try {
-      Scraper scraper = new Scraper(this.taskDto);
+      Scraper scraper = new Scraper(this.taskDto, new JsonStore(this.taskDto.getTitle()));
       for(ScraperResultDto result : scraper.get()) {
         System.out.print("result " + result.toString());
       }

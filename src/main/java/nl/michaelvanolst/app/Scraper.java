@@ -19,31 +19,15 @@ import lombok.AllArgsConstructor;
 import nl.michaelvanolst.app.Dto.ScraperResultDto;
 import nl.michaelvanolst.app.Dto.TaskDto;
 import nl.michaelvanolst.app.Exceptions.ScraperException;
+import nl.michaelvanolst.app.store.JsonStore;
 
 @AllArgsConstructor
 public class Scraper {
 
   private final TaskDto taskDto;
+  private final JsonStore jsonStore;
 
   public List<ScraperResultDto> get() throws ScraperException,IOException {
-
-    List<ScraperResultDto> results = new ArrayList<ScraperResultDto>();
-
-    if(!this.storageFileExists()){
-      return results;
-    }
-    
-
-    // if(directory_not_exists) {
-    //   create_directory
-    // }
-
-
-    // if(file_not_exists) {
-    //   create_file
-    //   and do not for the first time just return
-    // }
-
 
     try (Playwright playwright = Playwright.create()) {
       Browser browser = playwright.chromium().launch(
@@ -55,19 +39,26 @@ public class Scraper {
       URL netUrl = new URL(this.taskDto.getUrl());
       String host = netUrl.getHost();
 
-      // List<ScraperResultDto> results = new ArrayList<ScraperResultDto>();
+      List<ScraperResultDto> results = new ArrayList<ScraperResultDto>();
 
       Locator items = page.locator(this.taskDto.getItemHolder());
       System.out.println("items: " + items.count());
 
       for(int i = 0; i < items.count(); ++i) {
         
-        String uri = items.nth(i).locator(".mp-Listing-coverLink").getAttribute("href");
+        String uri = items.nth(i).locator(this.taskDto.getItemHref()).getAttribute("href");
         String url = host + uri;
 
-        // System.out.println(url);
+        if(this.jsonStore.exists(url)) {
+          System.out.println("File exists: "+ url);
+          continue;
+        }
 
+        // System.out.println(url);
+        ScraperResultDto scraperResultDto = new ScraperResultDto();
         Map<String, String> contents = new HashMap<String, String>();
+        
+        contents.put("url", url);
 
         for (Map.Entry<String, String> entry : this.taskDto.getSelectors().entrySet()) {
           // System.out.println(entry.getKey() + ":" + entry.getValue());
@@ -77,14 +68,32 @@ public class Scraper {
           // System.out.println(items.nth(i).locator(entry.getValue()).textContent());
         }
 
-        results.add(new ScraperResultDto(contents));
+        scraperResultDto.setUrl(url);
+        scraperResultDto.setContents(contents);
+
+        results.add(scraperResultDto);
       }
 
       page.close();
       browser.close();
       playwright.close();
 
+
       System.out.println("Finished scraping");
+
+      // store the data for the first time of scraping, so we don't notify all the results for the time
+      if(!this.jsonStore.exists(this.taskDto.getTitle())){
+        try {
+          for(ScraperResultDto scraperDto: results) {
+            if(!this.jsonStore.exists(scraperDto.getUrl())){
+              this.jsonStore.put(this.taskDto.getTitle(), scraperDto);
+            }
+          }
+        } catch(IOException ex) {
+          System.out.println(ex.getMessage());
+        }
+        return new ArrayList<ScraperResultDto>();
+      }
 
       return results;
       
@@ -94,26 +103,5 @@ public class Scraper {
 
   }
 
-
-  public boolean storageFileExists() throws IOException {
-
-    String storageDirectory = System.getProperty("user.dir") + "/storage";
-    String filename = this.taskDto.getTitle() + ".json";
-    filename = filename.toLowerCase().replace(" ", "_");
-
-    File directory = new File(storageDirectory);
-    if (! directory.exists()){
-      directory.mkdir();
-    }
-    
-
-    File storageFile = new File(storageDirectory + "/" + filename);
-    if (! storageFile.exists()){
-      storageFile.createNewFile();
-      return false;
-    }
-
-    return true;
-  }
 
 }

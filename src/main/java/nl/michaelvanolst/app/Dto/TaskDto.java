@@ -22,6 +22,7 @@ public class TaskDto {
   private int interval;
   private String filter;
   private String itemHolder;
+  private String itemHref;
   private Map<String, String> selectors;
 
   @Override

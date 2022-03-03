@@ -13,11 +13,12 @@ import lombok.Setter;
 @Setter
 public class ScraperResultDto {
   
+  private String url;
   private Map<String, String> contents;
 
   @Override
   public String toString() {
-    return this.contents.toString();
+    return this.url + " " + this.contents.toString();
   }
 
 }
