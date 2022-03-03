@@ -5,10 +5,10 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>nl.michaelvanolst.app</groupId>
-  <artifactId>bicycle_notifier</artifactId>
+  <artifactId>marktplaats_scraper</artifactId>
   <version>0.0.1</version>
 
-  <name>bicycle_notifier</name>
+  <name>marktplaats_scraper</name>
   <url>https://www.michaelvanolst.nl</url>
 
   <properties>
@@ -64,7 +64,7 @@
   </dependencies>
 
   <build>
-    <finalName>bicycle_notifier</finalName>
+    <finalName>marktplaats_scraper</finalName>
     <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
       <plugins> 
          <plugin>

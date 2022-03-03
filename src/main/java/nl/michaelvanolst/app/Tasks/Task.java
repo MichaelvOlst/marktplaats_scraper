@@ -32,7 +32,7 @@ public class Task extends TimerTask {
       for(ScraperResultDto result : scraper.get()) {
         System.out.print("result " + result.toString());
       }
-    } catch(ScraperException ex) {
+    } catch(Exception ex) {
       System.out.println(ex.getMessage());
     }
   }
