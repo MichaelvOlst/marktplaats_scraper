@@ -2,7 +2,6 @@ package nl.michaelvanolst.app.Tasks;
 
 import java.util.List;
 import java.util.TimerTask;
-import org.jsoup.nodes.Document;
 
 import nl.michaelvanolst.app.Config;
 import nl.michaelvanolst.app.Scraper;
