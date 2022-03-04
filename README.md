@@ -10,3 +10,10 @@ mvn clean compile assembly:single
 ```
 java -jar target/marktplaats_scraper.jar
 ```
+
+### Run project in Docker
+
+```
+docker build -t scraper .
+docker run --rm -it scraper:latest
+```
