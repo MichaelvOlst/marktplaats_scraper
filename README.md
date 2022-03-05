@@ -16,7 +16,8 @@ java -jar target/marktplaats_scraper.jar
 ```
 docker build -t scraper .
 docker run --rm -it scraper:latest
-or docker run --rm -it -v $(pwd)/storage:/storage scraper:latest
+or 
+docker run --rm -it -v $(pwd)/storage:/storage scraper:latest
 ```
 ### Things to fix
 - [ ] Clean files older than x days
