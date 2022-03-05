@@ -22,4 +22,4 @@ docker run --rm -it scraper:latest
 - [ ] Clean files older than x days
 - [ ] Notify the users by email
 - [ ] Attach the volume storage in the dockerfile
-- [ ] Implement logging system
+- [ ] Implement logging system with log4j2
