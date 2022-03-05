@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserType;
@@ -31,7 +32,7 @@ public class Scraper {
 
     try (Playwright playwright = Playwright.create()) {
       Browser browser = playwright.chromium().launch(
-        new BrowserType.LaunchOptions().setHeadless(true).setSlowMo(100)
+        new BrowserType.LaunchOptions().setHeadless(true).setSlowMo(500)
       );
       Page page = browser.newPage();
       page.navigate(this.taskDto.getUrl());
