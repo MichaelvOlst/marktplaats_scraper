@@ -21,4 +21,5 @@ docker run --rm -it scraper:latest
 ### Things to fix
 - [ ] Clean files older than x days
 - [ ] Notify the users by email
-- [ ] Attach the volume storage in the dockerfile 
+- [ ] Attach the volume storage in the dockerfile
+- [ ] Implement logging system
