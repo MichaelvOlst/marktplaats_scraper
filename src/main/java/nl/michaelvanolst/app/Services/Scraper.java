@@ -31,7 +31,7 @@ public class Scraper {
     try (Playwright playwright = Playwright.create()) {
       Browser browser = playwright.chromium().launch(
         new BrowserType.LaunchOptions()
-        .setHeadless(Config.getBoolean("scraper.debug"))
+        .setHeadless(Config.getBoolean("scraper.headless"))
         .setSlowMo(100)
       );
       Page page = browser.newPage();
