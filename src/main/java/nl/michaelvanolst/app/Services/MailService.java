@@ -67,8 +67,6 @@ public class MailService {
     message.setHeader("Content-Type", "text/html");
 
     Transport.send(message);
-
-    Logger.info("Done sending email");
   }
 
 

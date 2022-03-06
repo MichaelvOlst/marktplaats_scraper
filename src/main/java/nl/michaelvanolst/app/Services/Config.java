@@ -44,4 +44,9 @@ public final class Config {
     Config instance = getInstance();
     return Boolean.parseBoolean(instance.properties.getProperty(key));
   }
+
+  public static int getInt(String key)  {
+    Config instance = getInstance();
+    return Integer.parseInt(instance.properties.getProperty(key));
+  }
 }

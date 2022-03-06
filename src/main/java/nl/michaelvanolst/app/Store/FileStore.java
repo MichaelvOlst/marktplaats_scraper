@@ -6,10 +6,13 @@ import java.io.UnsupportedEncodingException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.concurrent.TimeUnit;
 
 import nl.michaelvanolst.app.Dto.ScraperResultDto;
+import nl.michaelvanolst.app.Services.Config;
 import nl.michaelvanolst.app.Services.Logger;
 
 public abstract class FileStore {
@@ -21,6 +24,7 @@ public abstract class FileStore {
     this.storageDirectory = System.getProperty("user.dir") + "/storage/" + taskDirectoryName;
 
     this.createDirectoryIfNotExists();
+    this.cleanOldFiles();
   }
 
   abstract public String getExtension();
@@ -75,6 +79,28 @@ public abstract class FileStore {
     }
 
     return true;
+  }
+
+  protected void cleanOldFiles() {
+    File folder = new File(this.storageDirectory);
+ 
+    if (!folder.exists()) {
+      return;
+    }
+
+    File[] listFiles = folder.listFiles();
+ 
+    long eligibleForDeletion = System.currentTimeMillis() - (Config.getInt("scraper.max_days") * 24 * 60 * 60 * 1000);
+ 
+    for (File listFile: listFiles) {
+      if (listFile.lastModified() < eligibleForDeletion) {
+        Logger.info("deleting: "+listFile.getAbsolutePath());
+        if (!listFile.delete()) {
+          Logger.error("Unable to delete file: " + listFile.getAbsolutePath());
+        }
+      }
+    }
+
   }
 
   protected String filenameToMD5(String filename) {
