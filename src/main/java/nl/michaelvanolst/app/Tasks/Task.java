@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
+import nl.michaelvanolst.app.Dto.EmailDto;
 import nl.michaelvanolst.app.Dto.ScraperResultDto;
 import nl.michaelvanolst.app.Dto.TaskDto;
 import nl.michaelvanolst.app.Exceptions.ScraperException;
@@ -71,10 +72,9 @@ public class Task extends TimerTask {
 
 
   private void notify(ScraperResultDto result) throws MessagingException,IOException {
+    EmailDto email = this.taskDto.getEmail();
     this.mailService.setResult(result);
-    this.mailService.setTitle(this.taskDto.getEmailTitle());
-    this.mailService.setTo(this.taskDto.getEmailTo());
-    this.mailService.setFrom(this.taskDto.getEmailFrom());
+    this.mailService.setEmail(this.taskDto.getEmail());
     this.mailService.send();
   }
 
