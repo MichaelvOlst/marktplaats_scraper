@@ -20,7 +20,7 @@ or
 docker run --rm -it -v $(pwd)/storage:/storage scraper:latest
 ```
 ### Things to fix
-- [ ] Clean files older than x days
+- [x] Clean files older than x days
 - [x] Parse the mail template and style it
 - [x] Notify the users by email
 - [x] Separate the logic for storing and scraping. The scraper should only scrape and return the results.

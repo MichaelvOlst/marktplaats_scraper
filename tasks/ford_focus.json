@@ -10,7 +10,8 @@
     "year": ".mp-Attribute--default >> nth=0",
     "seller": ".mp-Listing-seller-name"
   },
-  "mailFrom": "michaelvolst@gmail.com",
-  "mailTo": "michaelvolst@gmail.com",
+  "emailFrom": "michaelvolst@gmail.com",
+  "emailTo": "michaelvolst@gmail.com",
+  "emailTitle": "Nieuwe Ford Focus Station gevonden",
   "interval": 30
 }
