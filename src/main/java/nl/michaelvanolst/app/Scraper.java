@@ -30,9 +30,11 @@ public class Scraper {
 
   public List<ScraperResultDto> get() throws ScraperException,IOException {
 
+    Logger.info("Started Scraping: " + this.taskDto.getTitle());
+
     try (Playwright playwright = Playwright.create()) {
       Browser browser = playwright.chromium().launch(
-        new BrowserType.LaunchOptions().setHeadless(true).setSlowMo(500)
+        new BrowserType.LaunchOptions().setHeadless(true).setSlowMo(100)
       );
       Page page = browser.newPage();
       page.navigate(this.taskDto.getUrl());
@@ -43,7 +45,7 @@ public class Scraper {
       List<ScraperResultDto> results = new ArrayList<ScraperResultDto>();
 
       Locator items = page.locator(this.taskDto.getItemHolder());
-      System.out.println("items: " + items.count());
+      Logger.info("Total number of items: " + items.count());
 
       for(int i = 0; i < items.count(); ++i) {
         
@@ -51,22 +53,17 @@ public class Scraper {
         String url = host + uri;
 
         if(this.jsonStore.exists(url)) {
-          System.out.println("File exists: "+ url);
+          Logger.info("File exists " + url);
           continue;
         }
 
-        // System.out.println(url);
         ScraperResultDto scraperResultDto = new ScraperResultDto();
         Map<String, String> contents = new HashMap<String, String>();
         
         contents.put("url", url);
 
         for (Map.Entry<String, String> entry : this.taskDto.getSelectors().entrySet()) {
-          // System.out.println(entry.getKey() + ":" + entry.getValue());
-
           contents.put(entry.getKey(), items.nth(i).locator(entry.getValue()).textContent());
-
-          // System.out.println(items.nth(i).locator(entry.getValue()).textContent());
         }
 
         scraperResultDto.setUrl(url);
@@ -79,11 +76,13 @@ public class Scraper {
       browser.close();
       playwright.close();
 
-
-      System.out.println("Finished scraping");
+      Logger.info("Finished Scraping: " + this.taskDto.getTitle());
 
       // store the data for the first time of scraping, so we don't notify all the results for the time
       if(!this.jsonStore.exists(this.taskDto.getTitle())){
+
+        Logger.info("Directory does not exists, so we store the results for the first time, without notifiying the user");
+
         try {
           for(ScraperResultDto scraperDto: results) {
             if(!this.jsonStore.exists(scraperDto.getUrl())){
@@ -91,7 +90,7 @@ public class Scraper {
             }
           }
         } catch(IOException ex) {
-          System.out.println(ex.getMessage());
+          Logger.error("Could not save scraping result to file: " + ex.getMessage());
         }
         return new ArrayList<ScraperResultDto>();
       }
