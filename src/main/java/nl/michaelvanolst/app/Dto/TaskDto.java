@@ -23,9 +23,7 @@ public class TaskDto {
   private String filter;
   private String itemHolder;
   private String itemHref;
-  private String emailFrom;
-  private String emailTo;
-  private String emailTitle;
+  private EmailDto email;
 
   private Map<String, String> selectors;
 

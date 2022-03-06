@@ -20,15 +20,14 @@ import org.apache.logging.log4j.core.config.plugins.util.ResolverUtil.Test;
 
 import lombok.Getter;
 import lombok.Setter;
+import nl.michaelvanolst.app.Dto.EmailDto;
 import nl.michaelvanolst.app.Dto.ScraperResultDto;
 
 @Getter
 @Setter
 public class MailService {
 
-  private String from;
-  private String to;
-  private String title;
+  private EmailDto email;
   private ScraperResultDto result;
   private Session session;
   
@@ -57,12 +56,12 @@ public class MailService {
 
   public void send() throws MessagingException,IOException {
     Message message = new MimeMessage(this.session);
-    message.setFrom(new InternetAddress(this.from));
+    message.setFrom(new InternetAddress(this.email.getFrom()));
     message.setRecipients(
       Message.RecipientType.TO,
-      InternetAddress.parse(this.to)
+      InternetAddress.parse(this.email.getTo())
     );
-    message.setSubject(this.title);
+    message.setSubject(this.email.getTitle());
     message.setText(getContentFromTemplate());
     message.setHeader("Content-Type", "text/html");
 
