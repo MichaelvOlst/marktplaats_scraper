@@ -72,9 +72,9 @@ public class Task extends TimerTask {
 
   private void notify(ScraperResultDto result) throws MessagingException,IOException {
     this.mailService.setResult(result);
-    this.mailService.setTitle(this.taskDto.getTitle());
-    this.mailService.setTo(this.taskDto.getMailTo());
-    this.mailService.setFrom(this.taskDto.getMailFrom());
+    this.mailService.setTitle(this.taskDto.getEmailTitle());
+    this.mailService.setTo(this.taskDto.getEmailTo());
+    this.mailService.setFrom(this.taskDto.getEmailFrom());
     this.mailService.send();
   }
 
