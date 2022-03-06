@@ -1,4 +1,4 @@
-package nl.michaelvanolst.app;
+package nl.michaelvanolst.app.Services;
 
 import java.util.List;
 import java.util.Timer;

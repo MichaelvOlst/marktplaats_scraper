@@ -1,4 +1,4 @@
-package nl.michaelvanolst.app;
+package nl.michaelvanolst.app.Services;
 
 import org.apache.logging.log4j.LogManager;
 

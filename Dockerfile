@@ -34,6 +34,8 @@ RUN apt-get update \
     && apt-get install libxshmfence1 -y
 
 COPY tasks /tasks
+COPY templates /templates
+COPY config.properties /config.properties
 COPY --from=build /app/target/marktplaats_scraper.jar marktplaats_scraper.jar
 ENTRYPOINT ["java", "-jar","marktplaats_scraper.jar"]
 

@@ -1,4 +1,4 @@
-package nl.michaelvanolst.app.store;
+package nl.michaelvanolst.app.Store;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,8 +9,8 @@ import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import nl.michaelvanolst.app.Logger;
 import nl.michaelvanolst.app.Dto.ScraperResultDto;
+import nl.michaelvanolst.app.Services.Logger;
 
 public abstract class FileStore {
 

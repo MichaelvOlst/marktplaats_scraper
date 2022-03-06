@@ -1,17 +1,18 @@
-package nl.michaelvanolst.app;
+package nl.michaelvanolst.app.Services;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import org.apache.commons.lang3.StringUtils;
+
 public final class Config {
   private static Config INSTANCE;
   private Properties properties;
   
   private Config() {
-
-    String configPropertyFile = System.getProperty("user.dir") + "/config.properties";
+    String configPropertyFile = StringUtils.stripEnd(System.getProperty("user.dir"), "/") + "/config.properties";
 
     try (InputStream input = new FileInputStream(configPropertyFile)) {
         this.properties = new Properties();
@@ -32,5 +33,15 @@ public final class Config {
   public static String getProperty(String key)  {
     Config instance = getInstance();
     return instance.properties.getProperty(key);
+  }
+
+  public static String getString(String key)  {
+    Config instance = getInstance();
+    return instance.properties.getProperty(key);
+  }
+
+  public static boolean getBoolean(String key)  {
+    Config instance = getInstance();
+    return Boolean.parseBoolean(instance.properties.getProperty(key));
   }
 }

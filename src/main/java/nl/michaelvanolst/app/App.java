@@ -3,15 +3,15 @@ package nl.michaelvanolst.app;
 import java.io.IOException;
 
 import org.apache.commons.lang3.StringUtils;
+
+import nl.michaelvanolst.app.Services.Logger;
+import nl.michaelvanolst.app.Services.ScrapeScheduler;
 import nl.michaelvanolst.app.Tasks.TaskCollector;
 
 public class App 
 {
     public static void main( String[] args ) throws IOException {
-
-        String basePath = StringUtils.stripEnd(System.getProperty("user.dir"), "/");
-        String taskDirectory = basePath + "/tasks";
-
+        String taskDirectory = StringUtils.stripEnd(System.getProperty("user.dir"), "/") + "/tasks";
         TaskCollector taskCollector = new TaskCollector(taskDirectory);
         
         // try {

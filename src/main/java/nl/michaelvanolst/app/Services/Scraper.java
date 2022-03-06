@@ -1,4 +1,4 @@
-package nl.michaelvanolst.app;
+package nl.michaelvanolst.app.Services;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,13 +30,15 @@ public class Scraper {
 
     try (Playwright playwright = Playwright.create()) {
       Browser browser = playwright.chromium().launch(
-        new BrowserType.LaunchOptions().setHeadless(false).setSlowMo(100)
+        new BrowserType.LaunchOptions()
+        .setHeadless(Config.getBoolean("scraper.debug"))
+        .setSlowMo(100)
       );
       Page page = browser.newPage();
       page.navigate(this.taskDto.getUrl());
 
       URL netUrl = new URL(this.taskDto.getUrl());
-      String host = netUrl.getHost();
+      String host = netUrl.getProtocol() + "://" +netUrl.getHost();
 
       List<ScraperResultDto> results = new ArrayList<ScraperResultDto>();
 
@@ -68,8 +70,6 @@ public class Scraper {
       playwright.close();
 
       Logger.info("Finished Scraping: " + this.taskDto.getTitle());
-
-      // store the data for the first time of scraping, so we don't notify all the results for the time
 
       return results;
       
