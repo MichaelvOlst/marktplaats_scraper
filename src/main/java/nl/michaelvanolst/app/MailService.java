@@ -62,4 +62,15 @@ public class MailService {
     Logger.info("Done sending email");
   }
 
+
+  public String getContentFromTemplate() {
+    // StringBuffer content = new StringBuffer();
+    // try {
+    //     content.append(FreeMarkerTemplateU.processTemplateIntoString(fmConfiguration.getTemplate("email-template.flth"), model));
+    // } catch (Exception e) {
+    //     e.printStackTrace();
+    // }
+    // return content.toString();
+  }
+
 }
