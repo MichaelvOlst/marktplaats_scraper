@@ -10,5 +10,7 @@
     "year": ".mp-Attribute--default >> nth=0",
     "seller": ".mp-Listing-seller-name"
   },
-  "interval": 10
+  "mailFrom": "michaelvolst@gmail.com",
+  "mailTo": "michaelvolst@gmail.com",
+  "interval": 30
 }

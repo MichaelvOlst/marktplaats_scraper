@@ -3,6 +3,9 @@ package nl.michaelvanolst.app.store;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -28,7 +31,20 @@ public abstract class FileStore {
 
   abstract public ScraperResultDto get(String filename) throws IOException;
 
-  abstract public void put(String filename, ScraperResultDto scraperResultDto) throws IOException;
+  abstract public void put(ScraperResultDto scraperResultDto) throws IOException;
+
+  public boolean isEmpty() throws IOException {
+
+    Path storageDirectory = this.getFile(this.storageDirectory).toPath();
+
+    if (Files.isDirectory(storageDirectory)) {
+      try (DirectoryStream<Path> directory = Files.newDirectoryStream(storageDirectory)) {
+        return !directory.iterator().hasNext();
+      }
+    }
+
+    return false;
+  }
 
   protected File getFile(String filename) {
     return new File(this.getAbsolutePath(filename));

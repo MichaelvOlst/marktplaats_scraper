@@ -5,12 +5,14 @@ import java.util.TimerTask;
 
 import nl.michaelvanolst.app.Config;
 import nl.michaelvanolst.app.Logger;
+import nl.michaelvanolst.app.MailService;
 import nl.michaelvanolst.app.Scraper;
 import nl.michaelvanolst.app.Dto.ScraperResultDto;
 import nl.michaelvanolst.app.Dto.TaskDto;
 import nl.michaelvanolst.app.Exceptions.ScraperException;
 import nl.michaelvanolst.app.store.JsonStore;
 
+import java.io.IOException;
 import java.util.*;
 import javax.mail.*;
 import javax.mail.internet.*;
@@ -22,76 +24,58 @@ import javax.mail.Transport;
 public class Task extends TimerTask {
 
   private final TaskDto taskDto;
+  private final JsonStore jsonStore;
+  private final MailService mailService;
+  private List<ScraperResultDto> results = new ArrayList<ScraperResultDto>();
 
   public Task(TaskDto taskDto) {
     this.taskDto = taskDto;
+    this.jsonStore = new JsonStore(this.taskDto.getTitle());
+    this.mailService = new MailService();
   }
 
   public void run() {
     try {
-      Scraper scraper = new Scraper(this.taskDto, new JsonStore(this.taskDto.getTitle()));
-      for(ScraperResultDto result : scraper.get()) {
-        Logger.info("Scraping result: " + result.toString());
-      }
+      Scraper scraper = new Scraper(this.taskDto);
+      this.results = scraper.get();
+      this.handleResults();
     } catch(Exception ex) {
       Logger.fatal("Error in the scraper: "+ ex.getMessage());
     }
   }
 
-  private void parseAndFilterContent(String[] contents) {
-    // List<String> filteredList = new ArrayList<String>();
 
-    for(String content : contents) {
-      Logger.info("Content of the result: "+content);
+  private void handleResults() throws IOException,MessagingException {
+
+    if(this.jsonStore.isEmpty()) {
+      for(ScraperResultDto result: this.results) {
+        this.jsonStore.putIfNotExists(result);
+      }
+
+      return;
+    }
+    
+    for(ScraperResultDto result: this.results) {
+      if(this.jsonStore.exists(result.getUrl())) {
+        continue;
+      }
+
+      this.notify(result);
+      this.jsonStore.put(result);
     }
 
-    // String[] filterSplitted = this.filter.split(":");
-    // String filter = filterSplitted[0].trim();
-    // String value = filterSplitted[1].trim();
-
-    // if(filter.contains("contains") && contents.contains(value)) {
-    //   // filteredList.add(text);
-    // }
-    
-
-    // this.notifyByMail(filteredList);
+    Logger.info("finished");
   }
 
 
-  private void notifyByMail(List<String> filteredList) {
-    final String username = Config.getProperty("mail.username");
-    final String password = Config.getProperty("mail.password");
+  private void notify(ScraperResultDto result) throws MessagingException{
 
-    Properties prop = new Properties();
-    prop.put("mail.smtp.host", Config.getProperty("mail.host"));
-    prop.put("mail.smtp.port", Config.getProperty("mail.port"));
-    prop.put("mail.smtp.auth", Config.getProperty("mail.auth"));
-    // prop.put("mail.smtp.starttls.enable", "true"); //TLS
-    
-    Session session = Session.getInstance(prop,
-            new javax.mail.Authenticator() {
-                protected PasswordAuthentication getPasswordAuthentication() {
-                    return new PasswordAuthentication(username, password);
-                }
-            });
+    Logger.info("Notify the user with " + result.getUrl());
 
-    try {
-
-        Message message = new MimeMessage(session);
-        message.setFrom(new InternetAddress("michaelvolst@gmail.com"));
-        message.setRecipients(
-                Message.RecipientType.TO,
-                InternetAddress.parse("michaelvolst@gmail.com")
-        );
-        message.setSubject("Testing Gmail TLS");
-        message.setText("Dear Mail Crawler,"
-                + "\n\n Please do not spam my email!");
-
-        Transport.send(message);
-
-        Logger.info("Done sending email");
-    } catch (MessagingException e) {
-        e.printStackTrace();
-    }
+    this.mailService.setResult(result);
+    this.mailService.setTo(this.taskDto.getMailTo());
+    this.mailService.setFrom(this.taskDto.getMailFrom());
+    this.mailService.send();
   }
+
 }
