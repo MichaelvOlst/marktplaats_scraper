@@ -23,6 +23,8 @@ public class TaskDto {
   private String filter;
   private String itemHolder;
   private String itemHref;
+  private String mailFrom;
+  private String mailTo;
   private Map<String, String> selectors;
 
   @Override

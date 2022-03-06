@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import nl.michaelvanolst.app.Dto.ScraperResultDto;
 
 public class JsonStore extends FileStore {
@@ -20,6 +19,20 @@ public class JsonStore extends FileStore {
 
   @Override
   public boolean exists(String filename) {
+    String extension = "";
+    int i = filename.lastIndexOf('.');
+    int p = Math.max(filename.lastIndexOf('/'), filename.lastIndexOf('\\'));
+
+    if (i > p) {
+      extension = filename.substring(i+1);
+    }
+
+    // check if the filename is a directory
+    if(extension == "") {
+      return this.getFile(filename).exists();
+    }
+    
+    // if the filename is a file then check if it has content
     if(this.getFile(filename).length() == 0) {
       return false;
     }
@@ -38,7 +51,17 @@ public class JsonStore extends FileStore {
   }
 
   @Override
-  public void put(String filename, ScraperResultDto scraperResultDto) throws IOException {
+  public void put(ScraperResultDto scraperResultDto) throws IOException {
+    ObjectMapper mapper = new ObjectMapper();
+    mapper.writerWithDefaultPrettyPrinter().writeValue(new File(this.getAbsolutePath(scraperResultDto.getUrl())), scraperResultDto);
+  }
+
+  public void putIfNotExists(ScraperResultDto scraperResultDto) throws IOException {
+
+    if(this.exists(scraperResultDto.getUrl())) {
+      return;
+    }
+
     ObjectMapper mapper = new ObjectMapper();
     mapper.writerWithDefaultPrettyPrinter().writeValue(new File(this.getAbsolutePath(scraperResultDto.getUrl())), scraperResultDto);
   }
