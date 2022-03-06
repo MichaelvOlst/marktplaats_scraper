@@ -6,6 +6,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import nl.michaelvanolst.app.Logger;
 import nl.michaelvanolst.app.Dto.ScraperResultDto;
 
 public abstract class FileStore {
@@ -74,9 +75,9 @@ public abstract class FileStore {
     
       digest = sb.toString();
     } catch (UnsupportedEncodingException ex) {
-      System.out.println(ex.getMessage());
+      Logger.fatal("Unsupperted encoding: " + ex.getMessage());
     } catch (NoSuchAlgorithmException ex) {
-      System.out.println(ex.getMessage());
+      Logger.fatal("No algorithm: " + ex.getMessage());
     }
     return digest;
   }

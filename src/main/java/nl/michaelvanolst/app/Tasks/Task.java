@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.TimerTask;
 
 import nl.michaelvanolst.app.Config;
+import nl.michaelvanolst.app.Logger;
 import nl.michaelvanolst.app.Scraper;
 import nl.michaelvanolst.app.Dto.ScraperResultDto;
 import nl.michaelvanolst.app.Dto.TaskDto;
@@ -30,10 +31,10 @@ public class Task extends TimerTask {
     try {
       Scraper scraper = new Scraper(this.taskDto, new JsonStore(this.taskDto.getTitle()));
       for(ScraperResultDto result : scraper.get()) {
-        System.out.print("result " + result.toString());
+        Logger.info("Scraping result: " + result.toString());
       }
     } catch(Exception ex) {
-      System.out.println(ex.getMessage());
+      Logger.fatal("Error in the scraper: "+ ex.getMessage());
     }
   }
 
@@ -41,7 +42,7 @@ public class Task extends TimerTask {
     // List<String> filteredList = new ArrayList<String>();
 
     for(String content : contents) {
-      System.out.println(content);
+      Logger.info("Content of the result: "+content);
     }
 
     // String[] filterSplitted = this.filter.split(":");
@@ -49,7 +50,6 @@ public class Task extends TimerTask {
     // String value = filterSplitted[1].trim();
 
     // if(filter.contains("contains") && contents.contains(value)) {
-    //   System.out.println(contents);
     //   // filteredList.add(text);
     // }
     
@@ -89,8 +89,7 @@ public class Task extends TimerTask {
 
         Transport.send(message);
 
-        System.out.println("Done");
-
+        Logger.info("Done sending email");
     } catch (MessagingException e) {
         e.printStackTrace();
     }

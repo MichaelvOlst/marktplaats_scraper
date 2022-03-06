@@ -39,7 +39,6 @@ public class JsonStore extends FileStore {
 
   @Override
   public void put(String filename, ScraperResultDto scraperResultDto) throws IOException {
-    System.out.println(scraperResultDto.getUrl());
     ObjectMapper mapper = new ObjectMapper();
     mapper.writerWithDefaultPrettyPrinter().writeValue(new File(this.getAbsolutePath(scraperResultDto.getUrl())), scraperResultDto);
   }
