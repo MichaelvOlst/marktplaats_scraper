@@ -1,4 +1,4 @@
-package nl.michaelvanolst.app.store;
+package nl.michaelvanolst.app.Store;
 
 import java.io.File;
 import java.io.IOException;

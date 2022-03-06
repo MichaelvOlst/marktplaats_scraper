@@ -1,5 +1,9 @@
-package nl.michaelvanolst.app;
+package nl.michaelvanolst.app.Services;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.mail.Authenticator;
@@ -11,6 +15,9 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.core.config.plugins.util.ResolverUtil.Test;
+
 import lombok.Getter;
 import lombok.Setter;
 import nl.michaelvanolst.app.Dto.ScraperResultDto;
@@ -21,6 +28,7 @@ public class MailService {
 
   private String from;
   private String to;
+  private String title;
   private ScraperResultDto result;
   private Session session;
   
@@ -29,13 +37,13 @@ public class MailService {
   }
 
   public void createSession() {
-    final String username = Config.getProperty("mail.username");
-    final String password = Config.getProperty("mail.password");
+    final String username = Config.getString("mail.username");
+    final String password = Config.getString("mail.password");
 
     Properties prop = new Properties();
-    prop.put("mail.smtp.host", Config.getProperty("mail.host"));
-    prop.put("mail.smtp.port", Config.getProperty("mail.port"));
-    prop.put("mail.smtp.auth", Config.getProperty("mail.auth"));
+    prop.put("mail.smtp.host", Config.getString("mail.host"));
+    prop.put("mail.smtp.port", Config.getString("mail.port"));
+    prop.put("mail.smtp.auth", Config.getString("mail.auth"));
 
     Authenticator authenticator = new javax.mail.Authenticator() {
       protected PasswordAuthentication getPasswordAuthentication() {
@@ -47,15 +55,16 @@ public class MailService {
   }
 
 
-  public void send() throws MessagingException {
+  public void send() throws MessagingException,IOException {
     Message message = new MimeMessage(this.session);
     message.setFrom(new InternetAddress(this.from));
     message.setRecipients(
       Message.RecipientType.TO,
       InternetAddress.parse(this.to)
     );
-    message.setSubject("Testing Gmail TLS");
-    message.setText("Dear Mail Crawler," + "\n\n " + result.toString());
+    message.setSubject(this.title);
+    message.setText(getContentFromTemplate());
+    message.setHeader("Content-Type", "text/html");
 
     Transport.send(message);
 
@@ -63,14 +72,16 @@ public class MailService {
   }
 
 
-  public String getContentFromTemplate() {
-    // StringBuffer content = new StringBuffer();
-    // try {
-    //     content.append(FreeMarkerTemplateU.processTemplateIntoString(fmConfiguration.getTemplate("email-template.flth"), model));
-    // } catch (Exception e) {
-    //     e.printStackTrace();
-    // }
-    // return content.toString();
+  public String getContentFromTemplate() throws IOException {
+    String emailHtmlPath = StringUtils.stripEnd(System.getProperty("user.dir"), "/") + "/templates/notify_email.html";
+    File file = new File(emailHtmlPath);
+    String template = Files.readString(file.toPath());
+
+    for (Map.Entry<String, String> entry : this.result.getContents().entrySet()) {
+      template = template.replace("{{"+ entry.getKey() +"}}", entry.getValue());
+    }
+
+    return template;
   }
 
 }

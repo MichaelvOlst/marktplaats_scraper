@@ -3,3 +3,4 @@ mail.port=587
 mail.auth=true
 mail.username=username
 mail.password=password
+scraper.headless=true
