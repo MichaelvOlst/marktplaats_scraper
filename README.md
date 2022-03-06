@@ -23,4 +23,4 @@ docker run --rm -it -v $(pwd)/storage:/storage scraper:latest
 - [ ] Clean files older than x days
 - [ ] Notify the users by email
 - [x] Attach the volume storage in the dockerfile
-- [ ] Implement logging system with log4j2
+- [x] Implement logging system with log4j2
