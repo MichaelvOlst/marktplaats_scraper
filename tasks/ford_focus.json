@@ -1,0 +1,19 @@
+{
+  "title": "Ford Focus Station",
+  "url": "https://www.marktplaats.nl/l/auto-s/ford/f/focus+benzine/784+473/#f:484|constructionYearFrom:2019|sortBy:SORT_INDEX|sortOrder:DECREASING",
+  "itemHolder": ".mp-Listing--list-item",
+  "itemHref": ".mp-Listing-coverLink",
+  "selectors": {
+    "title": ".mp-Listing-title",
+    "price": ".mp-Listing-price",
+    "kilometers": ".mp-Listing-attributes-nap-mileage",
+    "year": ".mp-Attribute--default >> nth=0",
+    "seller": ".mp-Listing-seller-name"
+  },
+  "email": {
+    "from": "email@example.com",
+    "to": "email@example.com",
+    "title": "Nieuwe Ford Focus Station gevonden"
+  },
+  "interval": 30
+}
