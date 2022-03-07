@@ -44,7 +44,7 @@ public class MailService {
     prop.put("mail.smtp.port", Config.getString("mail.port"));
     prop.put("mail.smtp.auth", Config.getString("mail.auth"));
 
-    if(Config.getBoolean("mail.auth")) {
+    if(Config.getBoolean("mail.ssl")) {
       prop.put("mail.smtp.starttls.enable", "true"); //TLS
       prop.put("mail.smtp.ssl.protocols", "TLSv1.2");
     }
