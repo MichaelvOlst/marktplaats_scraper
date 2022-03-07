@@ -41,15 +41,12 @@ If you think something is missing or the code can be better, Let me know or crea
 }
 ```
 
-### Command to run for compiling into a fat jar
+### Commands for compiling and running the jar
 
 ```
 mvn clean compile assembly:single
-```
-### Command to run for calling the jar file
-
-```
 java -jar target/marktplaats_scraper.jar
+
 ```
 
 ### Run project in Docker
