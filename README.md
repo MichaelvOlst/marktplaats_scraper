@@ -1,4 +1,4 @@
-# marktplaats_scraper
+# Marktplaats scraper
 It scrapes marktplaats for new items and notifies you by email. 
 You can create a task which should be in json, in the task you can define the interval (which is in seconds) and to which email adress it should go and so on. You can copy the task that is already in the "tasks" folder if you would like to get started or you could simply create one yourself with the code below.
 
