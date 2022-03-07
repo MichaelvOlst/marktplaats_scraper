@@ -62,10 +62,3 @@ docker run --rm -it -v $(pwd)/storage:/storage scraper:latest
 or to run docker in the background you can use this command
 docker run --rm -it -v $(pwd)/storage:/storage -d scraper:latest
 ```
-### Things to fix
-- [x] Clean files older than x days
-- [x] Parse the mail template and style it
-- [x] Notify the users by email
-- [x] Separate the logic for storing and scraping. The scraper should only scrape and return the results.
-- [x] Attach the volume storage in the dockerfile
-- [x] Implement logging system with log4j2
