@@ -28,6 +28,9 @@ public class Scraper {
 
   public List<ScraperResultDto> get() throws ScraperException,IOException {
 
+    Logger.info("Started Scraping: " + this.taskDto.getTitle());
+
+
     try (Playwright playwright = Playwright.create()) {
       Browser browser = playwright.chromium().launch(
         new BrowserType.LaunchOptions()
@@ -43,7 +46,7 @@ public class Scraper {
       List<ScraperResultDto> results = new ArrayList<ScraperResultDto>();
 
       Locator items = page.locator(this.taskDto.getItemHolder());
-      Logger.info("Total number of items: " + items.count());
+      // Logger.info("Total number of items: " + items.count());
 
       for(int i = 0; i < items.count(); ++i) {
         
@@ -56,7 +59,12 @@ public class Scraper {
         contents.put("url", url);
 
         for (Map.Entry<String, String> entry : this.taskDto.getSelectors().entrySet()) {
-          contents.put(entry.getKey(), items.nth(i).locator(entry.getValue()).textContent());
+          Locator selector = items.nth(i).locator(entry.getValue());
+          if(selector.isVisible()) {
+            contents.put(entry.getKey(), selector.textContent());
+          } else {
+            contents.put(entry.getKey(), "");
+          }
         }
 
         scraperResultDto.setUrl(url);

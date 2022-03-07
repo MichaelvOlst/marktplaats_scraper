@@ -3,13 +3,8 @@ package nl.michaelvanolst.app.Store;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.concurrent.TimeUnit;
 
 import nl.michaelvanolst.app.Dto.ScraperResultDto;
 import nl.michaelvanolst.app.Services.Config;
@@ -39,15 +34,15 @@ public abstract class FileStore {
 
   public boolean isEmpty() throws IOException {
 
-    Path storageDirectory = this.getFile(this.storageDirectory).toPath();
+    File folder = new File(this.storageDirectory);
 
-    if (Files.isDirectory(storageDirectory)) {
-      try (DirectoryStream<Path> directory = Files.newDirectoryStream(storageDirectory)) {
-        return !directory.iterator().hasNext();
-      }
+    File[] listFiles = folder.listFiles();
+
+    if(listFiles.length > 0) {
+      return false;
     }
 
-    return false;
+    return true;
   }
 
   protected File getFile(String filename) {
@@ -90,7 +85,7 @@ public abstract class FileStore {
 
     File[] listFiles = folder.listFiles();
  
-    long eligibleForDeletion = System.currentTimeMillis() - (Config.getInt("scraper.max_days") * 24 * 60 * 60 * 1000);
+    long eligibleForDeletion = System.currentTimeMillis() - Long.valueOf(Config.getInt("scraper.max_days")) * 24 * 60 * 60 * 1000;
  
     for (File listFile: listFiles) {
       if (listFile.lastModified() < eligibleForDeletion) {
