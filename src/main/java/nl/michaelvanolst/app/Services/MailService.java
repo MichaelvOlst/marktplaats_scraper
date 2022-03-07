@@ -43,6 +43,8 @@ public class MailService {
     prop.put("mail.smtp.host", Config.getString("mail.host"));
     prop.put("mail.smtp.port", Config.getString("mail.port"));
     prop.put("mail.smtp.auth", Config.getString("mail.auth"));
+    prop.put("mail.smtp.starttls.enable", "true"); //TLS
+    prop.put("mail.smtp.ssl.protocols", "TLSv1.2");
 
     Authenticator authenticator = new javax.mail.Authenticator() {
       protected PasswordAuthentication getPasswordAuthentication() {
