@@ -1,6 +1,19 @@
 # marktplaats_scraper
 It scrapes marktplaats for new items and notifies you by email. 
-You can create a task which should be in json, in the task you can define the interval and to which email adress it should go and so on. You can copy the task that is already in the "tasks" folder if you would like to get started or you could simply create one yourself with the code below. 
+You can create a task which should be in json, in the task you can define the interval (which is in seconds) and to which email adress it should go and so on. You can copy the task that is already in the "tasks" folder if you would like to get started or you could simply create one yourself with the code below.
+
+### Email template
+The given selectors are also available in the email template, like so {{key}}. 
+So if you would like to customize the template and make use of more selectors or less.
+You can also see an example in the templates folder.
+
+### Config
+There is also a config.properties.example file in the root. You should copy this and use your own credentials or use the command below.
+
+```
+mv config.properties.example config.properties
+```
+
 I created this in Java and Maven so I can learn how to program in this language. 
 If you think something is missing or the code can be better, Let me know or create a pull request.
 
@@ -24,7 +37,7 @@ If you think something is missing or the code can be better, Let me know or crea
     "to": "michaelvolst@gmail.com",
     "title": "Nieuwe Ford Focus Station gevonden"
   },
-  "interval": 30
+  "interval": 600 // is in seconds.
 }
 ```
 
