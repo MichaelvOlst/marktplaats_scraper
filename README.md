@@ -50,11 +50,23 @@ java -jar target/marktplaats_scraper.jar
 
 ### Run project in Docker
 
+First you have to build it
 ```
 docker build -t scraper .
+```
+
+Then you can use any of these three commands below
+
+#### Without the storage folder
+```
 docker run --rm -it scraper:latest
-or 
+```
+#### With the storage folder
+```
 docker run --rm -it -v $(pwd)/storage:/storage scraper:latest
-or to run docker in the background you can use this command
+```
+
+#### Run docker in the background with the storage folder attached
+```
 docker run --rm -it -v $(pwd)/storage:/storage -d scraper:latest
 ```
