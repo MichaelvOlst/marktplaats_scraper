@@ -1,13 +1,10 @@
 package nl.michaelvanolst.app.services;
 
-import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserType;
@@ -26,10 +23,9 @@ public class Scraper {
 
   private final TaskDto taskDto;
 
-  public List<ScraperResultDto> get() throws ScraperException,IOException {
+  public List<ScraperResultDto> get() throws ScraperException {
 
     Logger.info("Started Scraping: " + this.taskDto.getTitle());
-
 
     try (Playwright playwright = Playwright.create()) {
       Browser browser = playwright.chromium().launch(
@@ -46,7 +42,6 @@ public class Scraper {
       List<ScraperResultDto> results = new ArrayList<ScraperResultDto>();
 
       Locator items = page.locator(this.taskDto.getItemHolder());
-      // Logger.info("Total number of items: " + items.count());
 
       for(int i = 0; i < items.count(); ++i) {
         
@@ -84,8 +79,5 @@ public class Scraper {
     } catch(Exception ex) {
       throw new ScraperException(ex.getMessage());
     }
-
   }
-
-
 }

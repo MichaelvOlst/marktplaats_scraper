@@ -3,7 +3,6 @@ package nl.michaelvanolst.app.services;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.stream.Stream;
 
 import nl.michaelvanolst.app.dto.TaskDto;
 import nl.michaelvanolst.app.store.JsonStore;

@@ -16,7 +16,6 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.core.config.plugins.util.ResolverUtil.Test;
 
 import lombok.Getter;
 import lombok.Setter;

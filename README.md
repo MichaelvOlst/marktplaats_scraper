@@ -1,4 +1,4 @@
-# Marktplaats scraper
+# Marktplaats Scraper
 
 I created this in Java and Maven so I can learn how to program in this language. 
 If you think something is missing or the code can be better, Let me know or create a pull request.
@@ -45,7 +45,7 @@ mv config.properties.example config.properties
 ### Commands for compiling and running the jar
 ```
 mvn clean compile assembly:single
-java -jar target/marktplaats_scraper.jar
+java -jar target/stock_notifier.jar
 ```
 
 ### Run project in Docker

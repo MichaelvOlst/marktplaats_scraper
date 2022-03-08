@@ -20,7 +20,6 @@ public class TaskDto {
   private String title;
   private String url;
   private int interval;
-  private String filter;
   private String itemHolder;
   private String itemHref;
   private EmailDto email;
@@ -29,7 +28,7 @@ public class TaskDto {
 
   @Override
   public String toString() {
-    return this.url + " " + this.interval + " " + this.filter + " " + this.selectors.toString();
+    return this.url + " " + this.interval + " " + this.itemHolder + " " + this.selectors.toString();
   }
 
 }
