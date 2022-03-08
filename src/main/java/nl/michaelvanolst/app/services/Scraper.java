@@ -1,4 +1,4 @@
-package nl.michaelvanolst.app.Services;
+package nl.michaelvanolst.app.services;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,9 +17,9 @@ import com.microsoft.playwright.Playwright;
 
 
 import lombok.AllArgsConstructor;
-import nl.michaelvanolst.app.Dto.ScraperResultDto;
-import nl.michaelvanolst.app.Dto.TaskDto;
-import nl.michaelvanolst.app.Exceptions.ScraperException;
+import nl.michaelvanolst.app.dto.ScraperResultDto;
+import nl.michaelvanolst.app.dto.TaskDto;
+import nl.michaelvanolst.app.exceptions.ScraperException;
 
 @AllArgsConstructor
 public class Scraper {

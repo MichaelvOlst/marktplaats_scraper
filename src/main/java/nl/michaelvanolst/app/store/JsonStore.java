@@ -1,10 +1,11 @@
-package nl.michaelvanolst.app.Store;
+package nl.michaelvanolst.app.store;
 
 import java.io.File;
 import java.io.IOException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import nl.michaelvanolst.app.Dto.ScraperResultDto;
+
+import nl.michaelvanolst.app.dto.ScraperResultDto;
 
 public class JsonStore extends FileStore {
 

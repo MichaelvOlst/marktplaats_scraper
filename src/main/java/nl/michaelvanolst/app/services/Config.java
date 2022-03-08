@@ -1,4 +1,4 @@
-package nl.michaelvanolst.app.Services;
+package nl.michaelvanolst.app.services;
 
 import java.io.FileInputStream;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package nl.michaelvanolst.app.Dto;
+package nl.michaelvanolst.app.dto;
 
 import java.util.Map;
 

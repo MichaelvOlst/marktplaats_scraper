@@ -1,19 +1,19 @@
-package nl.michaelvanolst.app.Tasks;
+package nl.michaelvanolst.app.tasks;
 
 import java.util.List;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
-import nl.michaelvanolst.app.Dto.EmailDto;
-import nl.michaelvanolst.app.Dto.ScraperResultDto;
-import nl.michaelvanolst.app.Dto.TaskDto;
-import nl.michaelvanolst.app.Exceptions.ScraperException;
-import nl.michaelvanolst.app.Services.Config;
-import nl.michaelvanolst.app.Services.Logger;
-import nl.michaelvanolst.app.Services.MailService;
-import nl.michaelvanolst.app.Services.Scraper;
-import nl.michaelvanolst.app.Store.FileStore;
-import nl.michaelvanolst.app.Store.JsonStore;
+import nl.michaelvanolst.app.dto.EmailDto;
+import nl.michaelvanolst.app.dto.ScraperResultDto;
+import nl.michaelvanolst.app.dto.TaskDto;
+import nl.michaelvanolst.app.exceptions.ScraperException;
+import nl.michaelvanolst.app.services.Config;
+import nl.michaelvanolst.app.services.Logger;
+import nl.michaelvanolst.app.services.MailService;
+import nl.michaelvanolst.app.services.Scraper;
+import nl.michaelvanolst.app.store.FileStore;
+import nl.michaelvanolst.app.store.JsonStore;
 
 import java.io.IOException;
 import java.util.*;
@@ -31,10 +31,10 @@ public class Task extends TimerTask {
   private final MailService mailService;
   private List<ScraperResultDto> results = new ArrayList<ScraperResultDto>();
 
-  public Task(TaskDto taskDto) {
+  public Task(TaskDto taskDto, FileStore store, MailService mailService) {
     this.taskDto = taskDto;
-    this.store = new JsonStore(this.taskDto.getTitle());
-    this.mailService = new MailService();
+    this.store = store;
+    this.mailService = mailService;
   }
 
   public void run() {

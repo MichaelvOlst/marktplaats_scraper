@@ -1,4 +1,4 @@
-package nl.michaelvanolst.app.Services;
+package nl.michaelvanolst.app.services;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,8 +20,8 @@ import org.apache.logging.log4j.core.config.plugins.util.ResolverUtil.Test;
 
 import lombok.Getter;
 import lombok.Setter;
-import nl.michaelvanolst.app.Dto.EmailDto;
-import nl.michaelvanolst.app.Dto.ScraperResultDto;
+import nl.michaelvanolst.app.dto.EmailDto;
+import nl.michaelvanolst.app.dto.ScraperResultDto;
 
 @Getter
 @Setter
@@ -48,7 +48,7 @@ public class MailService {
       prop.put("mail.smtp.starttls.enable", "true"); //TLS
       prop.put("mail.smtp.ssl.protocols", "TLSv1.2");
     }
-
+    
     Authenticator authenticator = new javax.mail.Authenticator() {
       protected PasswordAuthentication getPasswordAuthentication() {
         return new PasswordAuthentication(username, password);

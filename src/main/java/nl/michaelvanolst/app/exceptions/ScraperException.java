@@ -1,4 +1,4 @@
-package nl.michaelvanolst.app.Exceptions;
+package nl.michaelvanolst.app.exceptions;
 
 public class ScraperException extends Exception {
   public ScraperException(String message) {

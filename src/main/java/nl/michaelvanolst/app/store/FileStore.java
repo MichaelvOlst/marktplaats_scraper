@@ -1,4 +1,4 @@
-package nl.michaelvanolst.app.Store;
+package nl.michaelvanolst.app.store;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,9 +6,9 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import nl.michaelvanolst.app.Dto.ScraperResultDto;
-import nl.michaelvanolst.app.Services.Config;
-import nl.michaelvanolst.app.Services.Logger;
+import nl.michaelvanolst.app.dto.ScraperResultDto;
+import nl.michaelvanolst.app.services.Config;
+import nl.michaelvanolst.app.services.Logger;
 
 public abstract class FileStore {
 

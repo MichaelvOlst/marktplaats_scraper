@@ -1,4 +1,4 @@
-package nl.michaelvanolst.app.Tasks;
+package nl.michaelvanolst.app.tasks;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,7 +10,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import nl.michaelvanolst.app.Dto.TaskDto;
+
+import nl.michaelvanolst.app.dto.TaskDto;
 
 public class TaskCollector {
 
