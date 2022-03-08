@@ -56,6 +56,7 @@ public class JsonStore extends FileStore {
     mapper.writerWithDefaultPrettyPrinter().writeValue(new File(this.getAbsolutePath(scraperResultDto.getUrl())), scraperResultDto);
   }
 
+  @Override
   public void putIfNotExists(ScraperResultDto scraperResultDto) throws IOException {
 
     if(this.exists(scraperResultDto.getUrl())) {

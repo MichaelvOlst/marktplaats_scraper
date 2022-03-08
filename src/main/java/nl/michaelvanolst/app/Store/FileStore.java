@@ -32,6 +32,8 @@ public abstract class FileStore {
 
   abstract public void put(ScraperResultDto scraperResultDto) throws IOException;
 
+  abstract public void putIfNotExists(ScraperResultDto scraperResultDto) throws IOException;
+
   public boolean isEmpty() throws IOException {
 
     File folder = new File(this.storageDirectory);

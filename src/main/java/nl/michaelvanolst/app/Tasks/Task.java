@@ -12,6 +12,7 @@ import nl.michaelvanolst.app.Services.Config;
 import nl.michaelvanolst.app.Services.Logger;
 import nl.michaelvanolst.app.Services.MailService;
 import nl.michaelvanolst.app.Services.Scraper;
+import nl.michaelvanolst.app.Store.FileStore;
 import nl.michaelvanolst.app.Store.JsonStore;
 
 import java.io.IOException;
@@ -26,13 +27,13 @@ import javax.mail.Transport;
 public class Task extends TimerTask {
 
   private final TaskDto taskDto;
-  private final JsonStore jsonStore;
+  private final FileStore store;
   private final MailService mailService;
   private List<ScraperResultDto> results = new ArrayList<ScraperResultDto>();
 
   public Task(TaskDto taskDto) {
     this.taskDto = taskDto;
-    this.jsonStore = new JsonStore(this.taskDto.getTitle());
+    this.store = new JsonStore(this.taskDto.getTitle());
     this.mailService = new MailService();
   }
 
@@ -49,21 +50,21 @@ public class Task extends TimerTask {
 
   private void handleResults() throws IOException,MessagingException,InterruptedException {
 
-    if(this.jsonStore.isEmpty()) {
+    if(this.store.isEmpty()) {
       for(ScraperResultDto result: this.results) {
-        this.jsonStore.putIfNotExists(result);
+        this.store.putIfNotExists(result);
       }
 
       return;
     }
     
     for(ScraperResultDto result: this.results) {
-      if(this.jsonStore.exists(result.getUrl())) {
+      if(this.store.exists(result.getUrl())) {
         continue;
       }
 
       this.notify(result);
-      this.jsonStore.put(result);
+      this.store.put(result);
       TimeUnit.SECONDS.sleep(1);
     }
 
