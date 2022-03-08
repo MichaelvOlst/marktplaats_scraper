@@ -2,7 +2,7 @@
 
 I created this in Java and Maven so I can learn how to program in this language. 
 If you think something is missing or the code can be better, Let me know or create a pull request.
-Oh and maybe this is import, but I used jdk 11.
+Oh and maybe this is important, but I used jdk 11.
 
 It scrapes marktplaats for new items and notifies you by email. 
 You can create a task which should be in json, in the task you can define the interval (which is in seconds) and to which email adress it should go and so on. You can copy the task that is already in the "tasks" folder if you would like to get started or you could simply create one yourself with the code below.
