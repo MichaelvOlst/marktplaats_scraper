@@ -1,10 +1,10 @@
-package nl.michaelvanolst.app.dto;
+package nl.michaelvanolst.app.dtos;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
-@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class EmailDto {
   private String to;
   private String from;

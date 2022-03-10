@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import nl.michaelvanolst.app.dto.ScraperResultDto;
+import nl.michaelvanolst.app.dtos.ScraperResultDto;
 
 public class JsonStore extends FileStore {
 

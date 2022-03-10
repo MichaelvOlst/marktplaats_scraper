@@ -5,24 +5,26 @@ import java.util.List;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
-import nl.michaelvanolst.app.dto.ScraperResultDto;
-import nl.michaelvanolst.app.dto.TaskDto;
+import nl.michaelvanolst.app.dtos.EmailMessageDto;
+import nl.michaelvanolst.app.dtos.ScraperResultDto;
+import nl.michaelvanolst.app.dtos.TaskDto;
 import nl.michaelvanolst.app.services.Logger;
-import nl.michaelvanolst.app.services.MailService;
 import nl.michaelvanolst.app.services.Scraper;
+import nl.michaelvanolst.app.services.mail.GenerateEmailBody;
+import nl.michaelvanolst.app.services.mail.MailService;
 import nl.michaelvanolst.app.store.FileStore;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
 
-public class Task extends TimerTask {
+public class ScheduleTask extends TimerTask {
 
   private final TaskDto taskDto;
   private final FileStore store;
   private final MailService mailService;
   private List<ScraperResultDto> results = new ArrayList<ScraperResultDto>();
 
-  public Task(TaskDto taskDto, FileStore store, MailService mailService) {
+  public ScheduleTask(TaskDto taskDto, FileStore store, MailService mailService) {
     this.taskDto = taskDto;
     this.store = store;
     this.mailService = mailService;
@@ -64,8 +66,17 @@ public class Task extends TimerTask {
 
 
   private void notify(ScraperResultDto result) throws MessagingException,IOException {
-    this.mailService.setResult(result);
-    this.mailService.setEmail(this.taskDto.getEmail());
+
+    GenerateEmailBody emailBodyGenerator = new GenerateEmailBody(result);
+
+    EmailMessageDto emailMessageDto = EmailMessageDto.builder()
+      .to(this.taskDto.getEmailTo())
+      .from(this.taskDto.getEmailFrom())
+      .title(this.taskDto.getEmailTitle())
+      .body(emailBodyGenerator.get())
+      .build();
+
+    this.mailService.setEmailMessageDto(emailMessageDto);
     this.mailService.send();
   }
 

@@ -5,7 +5,7 @@ If you think something is missing or the code can be better, Let me know or crea
 Oh and maybe this is important, but I used jdk 11.
 
 It scrapes marktplaats for new items and notifies you by email. 
-You can create a task which should be in json, in the task you can define the interval (which is in seconds) and to which email adress it should go and so on. You can copy the task that is already in the "tasks" folder if you would like to get started or you could simply create one yourself with the code below.
+You can create a taskDto which should be in json, in the taskDto you can define the interval (which is in seconds) and to which email adress it should go and so on. You can copy the taskDto that is already in the "tasks" folder if you would like to get started or you could simply create one yourself with the code below.
 
 ### Email template
 The given selectors are also available in the email template, like so {{key}}. 
@@ -19,7 +19,7 @@ There is also a config.properties.example file in the root. You should copy this
 mv config.properties.example config.properties
 ```
 
-### Example task
+### Example taskDto
 ```
 {
   "title": "Ford Focus Station",
@@ -45,7 +45,7 @@ mv config.properties.example config.properties
 ### Commands for compiling and running the jar
 ```
 mvn clean compile assembly:single
-java -jar target/stock_notifier.jar
+java -jar target/marktplaats_scraper.jar
 ```
 
 ### Run project in Docker
