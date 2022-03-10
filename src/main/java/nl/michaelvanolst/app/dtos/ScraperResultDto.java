@@ -1,12 +1,14 @@
-package nl.michaelvanolst.app.dto;
+package nl.michaelvanolst.app.dtos;
 
 import java.util.Map;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

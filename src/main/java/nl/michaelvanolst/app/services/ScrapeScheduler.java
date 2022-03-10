@@ -4,9 +4,10 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import nl.michaelvanolst.app.dto.TaskDto;
+import nl.michaelvanolst.app.dtos.TaskDto;
+import nl.michaelvanolst.app.services.mail.MailService;
 import nl.michaelvanolst.app.store.JsonStore;
-import nl.michaelvanolst.app.tasks.Task;
+import nl.michaelvanolst.app.tasks.ScheduleTask;
 
 public class ScrapeScheduler {
 
@@ -18,9 +19,9 @@ public class ScrapeScheduler {
 
   public void run() {
     Timer scheduler = new Timer();
-    for (TaskDto task : this.tasks) {
-      TimerTask timerTask = new Task(task, new JsonStore(task.getTitle()), new MailService());
-      scheduler.schedule(timerTask, 0,Long.valueOf(task.getInterval() * 1000));
+    for (TaskDto taskDto : this.tasks) {
+      TimerTask timerTask = new ScheduleTask(taskDto, new JsonStore(taskDto.getTitle()), new MailService());
+      scheduler.schedule(timerTask, 0,Long.valueOf(taskDto.getInterval() * 1000));
     }
   }
 

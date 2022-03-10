@@ -6,7 +6,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import nl.michaelvanolst.app.dto.ScraperResultDto;
+import nl.michaelvanolst.app.dtos.ScraperResultDto;
 import nl.michaelvanolst.app.services.Config;
 import nl.michaelvanolst.app.services.Logger;
 

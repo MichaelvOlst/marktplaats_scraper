@@ -1,4 +1,4 @@
-package nl.michaelvanolst.app.dto;
+package nl.michaelvanolst.app.dtos;
 
 import java.util.Map;
 
@@ -6,10 +6,12 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -29,6 +31,21 @@ public class TaskDto {
   @Override
   public String toString() {
     return this.url + " " + this.interval + " " + this.itemHolder + " " + this.selectors.toString();
+  }
+
+  public String getEmailFrom()
+  {
+    return this.email.getFrom();
+  }
+
+  public String getEmailTo()
+  {
+    return this.email.getTo();
+  }
+
+  public String getEmailTitle()
+  {
+    return this.email.getTitle();
   }
 
 }

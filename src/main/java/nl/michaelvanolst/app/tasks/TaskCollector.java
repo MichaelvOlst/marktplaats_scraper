@@ -11,24 +11,24 @@ import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import nl.michaelvanolst.app.dto.TaskDto;
+import nl.michaelvanolst.app.dtos.TaskDto;
 
 public class TaskCollector {
 
   private final String directory;
-  private List<TaskDto> tasks = new ArrayList<TaskDto>();
+  private List<TaskDto> taskDtos = new ArrayList<TaskDto>();
 
   public TaskCollector(String directory) {
     this.directory = directory;
   }
   
   public List<TaskDto> get() throws IOException {
-
+    
     for (File file : this.getTaskFilesFromDirectory()) {
-      this.tasks.add(this.parseFileToTask(file));
+      this.taskDtos.add(this.parseFileToTask(file));
     }
 
-    return this.tasks;
+    return this.taskDtos;
   }
 
 
@@ -45,9 +45,9 @@ public class TaskCollector {
     String json = Files.readString(file.toPath());
 
     ObjectMapper objectMapper = new ObjectMapper();
-    TaskDto task = objectMapper.readValue(json, TaskDto.class);
+    TaskDto taskDto = objectMapper.readValue(json, TaskDto.class);
 
-    return task;
+    return taskDto;
   }
 
 }

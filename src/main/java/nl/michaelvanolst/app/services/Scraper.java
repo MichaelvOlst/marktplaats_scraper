@@ -14,8 +14,8 @@ import com.microsoft.playwright.Playwright;
 
 
 import lombok.AllArgsConstructor;
-import nl.michaelvanolst.app.dto.ScraperResultDto;
-import nl.michaelvanolst.app.dto.TaskDto;
+import nl.michaelvanolst.app.dtos.ScraperResultDto;
+import nl.michaelvanolst.app.dtos.TaskDto;
 import nl.michaelvanolst.app.exceptions.ScraperException;
 
 @AllArgsConstructor
@@ -48,7 +48,6 @@ public class Scraper {
         String uri = items.nth(i).locator(this.taskDto.getItemHref()).getAttribute("href");
         String url = host + uri;
 
-        ScraperResultDto scraperResultDto = new ScraperResultDto();
         Map<String, String> contents = new HashMap<String, String>();
         
         contents.put("url", url);
@@ -62,8 +61,10 @@ public class Scraper {
           }
         }
 
-        scraperResultDto.setUrl(url);
-        scraperResultDto.setContents(contents);
+        ScraperResultDto scraperResultDto = ScraperResultDto.builder()
+          .url(url)
+          .contents(contents)
+          .build();
 
         results.add(scraperResultDto);
       }

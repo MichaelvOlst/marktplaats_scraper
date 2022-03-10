@@ -1,9 +1,6 @@
-package nl.michaelvanolst.app.services;
+package nl.michaelvanolst.app.services.mail;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.util.Map;
 import java.util.Properties;
 
 import javax.mail.Authenticator;
@@ -15,26 +12,23 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-import org.apache.commons.lang3.StringUtils;
-
 import lombok.Getter;
 import lombok.Setter;
-import nl.michaelvanolst.app.dto.EmailDto;
-import nl.michaelvanolst.app.dto.ScraperResultDto;
+import nl.michaelvanolst.app.dtos.EmailMessageDto;
+import nl.michaelvanolst.app.services.Config;
 
 @Getter
 @Setter
 public class MailService {
 
-  private EmailDto email;
-  private ScraperResultDto result;
-  private Session session;
+  private EmailMessageDto emailMessageDto;
+  private final Session session;
   
   public MailService() {
-    this.createSession();
+    this.session = this.createSession();
   }
 
-  public void createSession() {
+  public Session createSession() {
     final String username = Config.getString("mail.username");
     final String password = Config.getString("mail.password");
 
@@ -54,35 +48,22 @@ public class MailService {
       }
     };
     
-    this.session = Session.getInstance(prop, authenticator);
+    return Session.getInstance(prop, authenticator);
   }
 
 
   public void send() throws MessagingException,IOException {
     Message message = new MimeMessage(this.session);
-    message.setFrom(new InternetAddress(this.email.getFrom()));
+    message.setFrom(new InternetAddress(this.emailMessageDto.getFrom()));
     message.setRecipients(
       Message.RecipientType.TO,
-      InternetAddress.parse(this.email.getTo())
+      InternetAddress.parse(this.emailMessageDto.getTo())
     );
-    message.setSubject(this.email.getTitle());
-    message.setText(getContentFromTemplate());
+    message.setSubject(this.emailMessageDto.getTitle());
+    message.setText(this.emailMessageDto.getBody());
     message.setHeader("Content-Type", "text/html");
 
     Transport.send(message);
-  }
-
-
-  public String getContentFromTemplate() throws IOException {
-    String emailHtmlPath = StringUtils.stripEnd(System.getProperty("user.dir"), "/") + "/templates/notify_email.html";
-    File file = new File(emailHtmlPath);
-    String template = Files.readString(file.toPath());
-
-    for (Map.Entry<String, String> entry : this.result.getContents().entrySet()) {
-      template = template.replace("{{"+ entry.getKey() +"}}", entry.getValue());
-    }
-
-    return template;
   }
 
 }
