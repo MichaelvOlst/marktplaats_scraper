@@ -11,6 +11,7 @@ import nl.michaelvanolst.app.tasks.TaskCollector;
 public class App 
 {
     public static void main( String[] args ) throws IOException {
+
         String taskDirectory = StringUtils.stripEnd(System.getProperty("user.dir"), "/") + "/tasks";
         TaskCollector taskCollector = new TaskCollector(taskDirectory);
 

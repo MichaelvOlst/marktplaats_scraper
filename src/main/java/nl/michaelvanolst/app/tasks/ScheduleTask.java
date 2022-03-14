@@ -21,19 +21,21 @@ public class ScheduleTask extends TimerTask {
 
   private final TaskDto taskDto;
   private final FileStore store;
-  private final MailService mailService;
   private List<ScraperResultDto> results = new ArrayList<ScraperResultDto>();
 
-  public ScheduleTask(TaskDto taskDto, FileStore store, MailService mailService) {
+  public ScheduleTask(TaskDto taskDto, FileStore store) {
     this.taskDto = taskDto;
     this.store = store;
-    this.mailService = mailService;
   }
 
   public void run() {
     try {
       Scraper scraper = new Scraper(this.taskDto);
       this.results = scraper.get();
+
+      Logger.info("results: "+ this.results);
+
+
       this.handleResults();
     } catch(Exception ex) {
       Logger.fatal("Error in the scraper: "+ ex.getMessage());
@@ -76,8 +78,8 @@ public class ScheduleTask extends TimerTask {
       .body(emailBodyGenerator.get())
       .build();
 
-    this.mailService.setEmailMessageDto(emailMessageDto);
-    this.mailService.send();
+    MailService mailservice = new MailService(emailMessageDto);
+    mailservice.send();
   }
 
 }

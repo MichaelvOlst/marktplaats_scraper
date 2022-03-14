@@ -21,11 +21,10 @@ import nl.michaelvanolst.app.services.Config;
 @Setter
 public class MailService {
 
-  private EmailMessageDto emailMessageDto;
-  private final Session session;
+  private final EmailMessageDto emailMessageDto;
   
-  public MailService() {
-    this.session = this.createSession();
+  public MailService(EmailMessageDto emailMessageDto) {
+    this.emailMessageDto = emailMessageDto;
   }
 
   public Session createSession() {
@@ -53,7 +52,7 @@ public class MailService {
 
 
   public void send() throws MessagingException,IOException {
-    Message message = new MimeMessage(this.session);
+    Message message = new MimeMessage(this.createSession());
     message.setFrom(new InternetAddress(this.emailMessageDto.getFrom()));
     message.setRecipients(
       Message.RecipientType.TO,

@@ -1,10 +1,12 @@
 package nl.michaelvanolst.app.services;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserType;
@@ -21,7 +23,13 @@ import nl.michaelvanolst.app.exceptions.ScraperException;
 @AllArgsConstructor
 public class Scraper {
 
+  private final int MAX_PAGE = 3;
   private final TaskDto taskDto;
+  private List<ScraperResultDto> results = new ArrayList<ScraperResultDto>();
+
+  public Scraper(TaskDto taskDto) {
+    this.taskDto = taskDto;
+  }
 
   public List<ScraperResultDto> get() throws ScraperException {
 
@@ -31,42 +39,35 @@ public class Scraper {
       Browser browser = playwright.chromium().launch(
         new BrowserType.LaunchOptions()
         .setHeadless(Config.getBoolean("scraper.headless"))
-        .setSlowMo(100)
+        .setSlowMo(300)
       );
       Page page = browser.newPage();
+
       page.navigate(this.taskDto.getUrl());
 
-      URL netUrl = new URL(this.taskDto.getUrl());
-      String host = netUrl.getProtocol() + "://" +netUrl.getHost();
+      Locator navLinks = page.locator(".mp-PaginationControls-pagination-pageList .mp-TextLink");
 
-      List<ScraperResultDto> results = new ArrayList<ScraperResultDto>();
+      List<String> urls = new ArrayList<>();
+      urls.add(this.taskDto.getUrl());
 
-      Locator items = page.locator(this.taskDto.getItemHolder());
+      for(int i = 0; i < navLinks.count(); ++i) {
+        navLinks.nth(i).waitFor();
 
-      for(int i = 0; i < items.count(); ++i) {
-        
-        String uri = items.nth(i).locator(this.taskDto.getItemHref()).getAttribute("href");
-        String url = host + uri;
+        String uri = navLinks.nth(i).getAttribute("href");
+        String url = this.getHost() + uri;
 
-        Map<String, String> contents = new HashMap<String, String>();
-        
-        contents.put("url", url);
+        urls.add(url);
 
-        for (Map.Entry<String, String> entry : this.taskDto.getSelectors().entrySet()) {
-          Locator selector = items.nth(i).locator(entry.getValue());
-          if(selector.isVisible()) {
-            contents.put(entry.getKey(), selector.textContent());
-          } else {
-            contents.put(entry.getKey(), "");
-          }
+        if(urls.size() >= MAX_PAGE) {
+          break;
         }
+      }
 
-        ScraperResultDto scraperResultDto = ScraperResultDto.builder()
-          .url(url)
-          .contents(contents)
-          .build();
+      Logger.info("urls to scrape: "+urls.toString());
 
-        results.add(scraperResultDto);
+      for (String url : urls) {
+        this.scrape(page, url);
+//        TimeUnit.SECONDS.sleep(1);
       }
 
       page.close();
@@ -74,11 +75,56 @@ public class Scraper {
       playwright.close();
 
       Logger.info("Finished Scraping: " + this.taskDto.getTitle());
-
-      return results;
-      
     } catch(Exception ex) {
       throw new ScraperException(ex.getMessage());
     }
+
+    return this.results;
+  }
+
+  private void scrape(Page page, String url) throws MalformedURLException {
+    page.navigate(url);
+
+    Logger.info("navigated to :" + url);
+
+    Locator items = page.locator(this.taskDto.getItemHolder());
+
+    Logger.info("items: "+ items.count());
+
+    for(int i = 0; i < items.count(); ++i) {
+
+      String uri = items.nth(i).locator(this.taskDto.getItemHref()).getAttribute("href");
+      String itemUrl = this.getHost() + uri;
+
+      Logger.info("itemurl : " +itemUrl);
+
+      Map<String, String> contents = new HashMap<String, String>();
+
+      contents.put("url", itemUrl);
+
+      for (Map.Entry<String, String> entry : this.taskDto.getSelectors().entrySet()) {
+        Locator selector = items.nth(i).locator(entry.getValue());
+        if(selector.isVisible()) {
+          contents.put(entry.getKey(), selector.textContent());
+        } else {
+          contents.put(entry.getKey(), "");
+        }
+      }
+
+      ScraperResultDto scraperResultDto = ScraperResultDto.builder()
+              .url(itemUrl)
+              .contents(contents)
+              .build();
+
+      Logger.info("scraper result: "+ scraperResultDto);
+
+      this.results.add(scraperResultDto);
+    }
+  }
+
+
+  private String getHost() throws MalformedURLException {
+    URL netUrl = new URL(this.taskDto.getUrl());
+    return  netUrl.getProtocol() + "://" +netUrl.getHost();
   }
 }
